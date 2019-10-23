@@ -1,1 +1,1 @@
-# ansible-gomodule-framework
+# ansible-go-module-framework
