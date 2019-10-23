@@ -57,3 +57,4 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/go,osx,ansible
+/examples/helloWorld/library/

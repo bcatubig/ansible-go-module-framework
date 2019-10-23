@@ -10,7 +10,7 @@ import (
 type (
 	AnsibleModule struct {
 		Result   AnsibleResult
-		ArgsFile []byte
+		ArgsFile ArgsFile
 	}
 
 	AnsibleResult struct {
@@ -18,31 +18,40 @@ type (
 		Changed bool   `json:"changed"`
 		Failed  bool   `json:"failed"`
 	}
+
+	ArgsFile struct {
+		Name string
+		Data []byte
+	}
 )
 
-func NewAnsibleModule(argSpec interface{}) (*AnsibleModule, error) {
+func NewAnsibleModule() (*AnsibleModule, error) {
+
 	if len(os.Args) != 2 {
-		return nil, fmt.Errorf("no argument file provided")
+		return nil, fmt.Errorf("no arguments file passed to module")
 	}
 
 	argsFile := os.Args[1]
 
-	args, err := ioutil.ReadAll(argsFile)
+	data, err := ioutil.ReadFile(argsFile)
 
 	if err != nil {
 		return nil, fmt.Errorf("could not read configuration file: %s", argsFile)
 	}
 
 	return &AnsibleModule{
-		Result:   AnsibleResult{},
-		ArgsFile: args,
+		Result: AnsibleResult{},
+		ArgsFile: ArgsFile{
+			Name: argsFile,
+			Data: data,
+		},
 	}, nil
 }
 
-func (a *AnsibleModule) ExitJSON() {
+func (a *AnsibleModule) Exit() {
 	returnResponse(a.Result)
 }
-func (a *AnsibleModule) FailJSON(msg string) {
+func (a *AnsibleModule) Fail(msg string) {
 	a.Result.Msg = msg
 	a.Result.Failed = true
 	returnResponse(a.Result)
@@ -70,4 +79,14 @@ func returnResponse(responseBody AnsibleResult) {
 	}
 
 	os.Exit(0)
+}
+
+func Fail(msg string) {
+	result := AnsibleResult{
+		Msg:     msg,
+		Changed: false,
+		Failed:  true,
+	}
+
+	returnResponse(result)
 }

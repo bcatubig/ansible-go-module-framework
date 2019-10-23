@@ -13,5 +13,5 @@ tab_width = 4
 [*.go]
 indent_style = tab
 
-[{.babelrc,.stylelintrc,.eslintrc,jest.config,*.json,*.jsb3,*.jsb2,*.bowerrc}]
+[{.babelrc,.stylelintrc,.eslintrc,jest.config,*.json,*.jsb3,*.jsb2,*.bowerrc,*.yml}]
 indent_size = 2
