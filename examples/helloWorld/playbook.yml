@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Hello, World!
+      helloWorld:
+
+    - name: Hello, Ansible!
+      helloWorld:
+        name: Ansible
+
+    - name: Async Hello, World!
+      helloWorld:
+      async: 1
+      poll: 1
+
+    - name: Async Hello, Ansible!
+      helloWorld:
+        name: Ansible
+      async: 1
+      poll: 1
